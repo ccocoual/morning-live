@@ -18,7 +18,7 @@ export default {
     const isPodcastPresent = computed(() => podcastQuery.value.length > 0);
 
     function searchPodcast() {
-      store.dispatch('searchPodcasts', { podcastQuery });
+      store.dispatch('searchPodcasts', podcastQuery.value);
     }
 
     return {

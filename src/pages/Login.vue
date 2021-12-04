@@ -1,7 +1,7 @@
 <template>
-  <div className="min-h-screen flex flex-col content-center items-center justify-center">
+  <div class="min-h-screen flex flex-col content-center items-center justify-center">
     <a
-      className="bg-spotify-default hover:bg-spotify-hover border-b-4 border-green-900 active:border-b-0 text-white font-bold py-2 px-4 rounded-full"
+      class="bg-spotify-default hover:bg-spotify-hover border-b-4 border-green-900 active:border-b-0 text-white font-bold py-2 px-4 rounded-full"
       :href="spotifyApiUrl"
     >
       Login to Spotify
