@@ -27,4 +27,10 @@ export const routes = [
       }
     },
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: {
+      name: 'login',
+    },
+  },
 ];
