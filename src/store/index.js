@@ -14,7 +14,7 @@ export const store = createStore({
   },
   actions: {
     async searchPodcasts({ commit }, podcastQuery) {
-      const podcasts = await SpotifyApi.searchTracks(podcastQuery);
+      const podcasts = await SpotifyApi.searchPodcasts(podcastQuery);
       commit('SET_PODCASTS', { podcasts });
     },
   },

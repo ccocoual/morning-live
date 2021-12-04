@@ -3,8 +3,8 @@
     <div>
       <img
         class="h-16 w-16 md:h-32 md:w-32 mx-auto md:mx-0 md:mr-6"
-        :src="podcast.album.images[0].url"
-        :alt="`${podcast.album.name} cover`"
+        :src="podcast.images[0].url"
+        :alt="`${podcast.name} cover`"
       />
     </div>
     <div class="max-w-sm w-full flex-col">
@@ -13,7 +13,7 @@
       </div>
       <div class="text-lg font-light text-green-300 whitespace-no-wrap overflow-hidden ellipsis">{{ artists }}</div>
       <div class="text-lg font-light text-pink-400 text-shadow whitespace-no-wrap overflow-hidden ellipsis">
-        {{ podcast.album.name }}
+        {{ podcast.description }}
       </div>
     </div>
   </div>

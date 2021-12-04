@@ -159,6 +159,18 @@ class SpotifyApiService {
     );
     return response.data.tracks.items;
   }
+
+  async searchPodcasts(searchQuery) {
+    const queryParams = {
+      q: searchQuery,
+      type: 'episode',
+      limit: 5,
+    };
+    const response = await this.session.get(
+      `${SPOTIFY_API_BASE_URL}${SPOTIFY_SEARCH_API_URL}?${qs.stringify(queryParams)}`
+    );
+    return response.data.episodes.items;
+  }
 }
 
 export default SpotifyApiService.instance;
