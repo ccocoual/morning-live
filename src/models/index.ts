@@ -1,8 +1,16 @@
-export interface Podcast {
-
+export interface SearchResult {
+  images: [];
+  name: string;
+  description: string;
 }
 
-export enum SearchType {
-	Podcast= "podcast",
-	Track = "track",
+export interface EpisodeInterface extends SearchResult {}
+
+export interface TrackInterface extends SearchResult {
+  artists: [];
+}
+
+export enum SearchTypeEnum {
+  Episode = 'episode',
+  Track = 'track',
 }

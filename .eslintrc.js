@@ -1,14 +1,21 @@
 module.exports = {
+  root: true,
   env: {
     node: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    'prettier'
-  ],
+  extends: ['plugin:vue/vue3-essential', '@vue/standard', '@vue/typescript/recommended', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 2020,
+  },
   rules: {
-    // override/add rules settings here, such as:
-    // 'vue/no-unused-vars': 'error'
-  }
-}
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'comma-dangle': ['error', 'only-multiline'],
+  },
+  globals: {
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
+  },
+};

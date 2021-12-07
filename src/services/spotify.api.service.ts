@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import * as qs from 'querystring';
 import { getHash } from '../utils/get-hash.utils';
+import { SearchTypeEnum } from '../models';
 
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1';
@@ -30,7 +31,10 @@ const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
 class SpotifyApiService {
-  constructor(enforcer) {
+  private session: any;
+  private readonly token: string;
+
+  constructor(enforcer: any) {
     if (enforcer !== singletonEnforcer) {
       throw new Error('Cannot construct singleton');
     }
@@ -45,11 +49,11 @@ class SpotifyApiService {
     });
 
     this.session.interceptors.response.use(
-      function (response) {
+      function (response: AxiosResponse) {
         return response;
       },
-      function (error) {
-        if (error.response.status === 401) {
+      function (error: AxiosError) {
+        if (error.response?.status === 401) {
           window.localStorage.removeItem('spotifyAccessToken');
           window.location.href = '/';
         }
@@ -69,16 +73,19 @@ class SpotifyApiService {
   getLocalStorageToken() {
     return window.localStorage.getItem('spotifyAccessToken');
   }
-  setLocalStorageToken(token) {
+  setLocalStorageToken(token: string) {
     return window.localStorage.setItem('spotifyAccessToken', token);
   }
 
   static get instance() {
     // Try to get an efficient singleton
+    // @ts-ignore
     if (!this[singleton]) {
+      // @ts-ignore
       this[singleton] = new SpotifyApiService(singletonEnforcer);
     }
 
+    // @ts-ignore
     return this[singleton];
   }
 
@@ -104,7 +111,7 @@ class SpotifyApiService {
     };
   }
 
-  async setDevice(device) {
+  async setDevice(device: any) {
     await this.session.put(SPOTIFY_API_BASE_URL + SPOTIFY_PLAYER_API_URL, {
       device_ids: [device.id],
     });
@@ -122,7 +129,7 @@ class SpotifyApiService {
     }
   }
 
-  async playTrack(trackId, deviceId) {
+  async playTrack(trackId: string, deviceId: string) {
     const queryParams = {
       device_id: deviceId,
     };
@@ -134,7 +141,7 @@ class SpotifyApiService {
     };
   }
 
-  async playTrackAtPosition(positionMs, deviceId) {
+  async playTrackAtPosition(positionMs: string, deviceId: string) {
     const queryParams = {
       position_ms: positionMs,
       device_id: deviceId,
@@ -149,7 +156,7 @@ class SpotifyApiService {
     };
   }
 
-  async getTrackAnalysis(trackId) {
+  async getTrackAnalysis(trackId: string) {
     try {
       const response = await this.session.get(
         `${SPOTIFY_API_BASE_URL}${SPOTIFY_TRACK_ANALYSIS_BY_ID_API_URL}/${trackId}`
@@ -160,28 +167,18 @@ class SpotifyApiService {
     }
   }
 
-  async searchTracks(searchQuery) {
+  async search(searchType: SearchTypeEnum, searchQuery: string) {
     const queryParams = {
       q: searchQuery,
-      type: 'track',
+      type: searchType,
       limit: 5,
     };
-    const response = await this.session.get(
-      `${SPOTIFY_API_BASE_URL}${SPOTIFY_SEARCH_API_URL}?${qs.stringify(queryParams)}`
-    );
-    return response.data.tracks.items;
-  }
+    const iterableKey = searchType + 's';
 
-  async searchPodcasts(searchQuery) {
-    const queryParams = {
-      q: searchQuery,
-      type: 'episode',
-      limit: 5,
-    };
     const response = await this.session.get(
       `${SPOTIFY_API_BASE_URL}${SPOTIFY_SEARCH_API_URL}?${qs.stringify(queryParams)}`
     );
-    return response.data.episodes.items;
+    return response.data[iterableKey].items;
   }
 }
 

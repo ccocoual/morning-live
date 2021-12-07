@@ -17,6 +17,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^1.10.1",
     "@vue/compiler-sfc": "^3.0.4",
     "autoprefixer": "^10.4.0",
     "eslint": "^7.14.0",
@@ -25,6 +26,6 @@
     "postcss": "^8.4.4",
     "prettier": "^2.5.1",
     "tailwindcss": "^2.2.19",
-    "vite": "^1.0.0-rc.13"
+    "vite": "^2.6.14"
   }
 }

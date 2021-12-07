@@ -1,6 +1,6 @@
 import Home from './pages/Home.vue';
 import Login from './pages/Login.vue';
-import SpotifyApi from './services/spotify.api.service.js';
+import SpotifyApi from './services/spotify.api.service';
 
 export const routes = [
   {

@@ -1,28 +1,32 @@
-import { createStore } from 'vuex';
+import { createStore, Store } from 'vuex';
 import SpotifyApi from '../services/spotify.api.service';
-import { Podcast, SearchType } from "../models";
+import { EpisodeInterface, SearchTypeEnum } from '../models';
+import { InjectionKey } from 'vue';
 
 export interface State {
-  podcasts: Podcast[];
-  searchType: SearchType;
+  searchResults: EpisodeInterface[];
+  searchType: SearchTypeEnum;
 }
 
-export const store = createStore({
-  state() {
-    return {
-      podcasts: [],
-      searchType: SearchType.Podcast,
-    };
+export const key: InjectionKey<Store<State>> = Symbol();
+
+export const store = createStore<State>({
+  state: {
+    searchResults: [],
+    searchType: SearchTypeEnum.Episode,
   },
   mutations: {
-    SET_PODCASTS(state, payload) {
-      state.podcasts = payload.podcasts;
+    SET_SEARCH_RESULTS(state, payload) {
+      state.searchResults = payload.searchResults;
+    },
+    SET_SEARCH_TYPE(state, payload) {
+      state.searchType = payload.searchType;
     },
   },
   actions: {
-    async searchPodcasts({ commit }, podcastQuery) {
-      const podcasts = await SpotifyApi.searchPodcasts(podcastQuery);
-      commit('SET_PODCASTS', { podcasts });
+    async search({ state, commit }, searchQuery) {
+      const searchResults = await SpotifyApi.search(state.searchType, searchQuery);
+      commit('SET_SEARCH_RESULTS', { searchResults });
     },
   },
 });
