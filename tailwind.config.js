@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'spotify-hover': '#1ed760',
-        'spotify-default': '#1db954',
+        'spotify-hover': 'var(--spotify-hover)',
+        'spotify-default': 'var(--spotify-default)',
       },
       textIndent: {
         // defaults to {}

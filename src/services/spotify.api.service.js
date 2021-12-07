@@ -44,6 +44,19 @@ class SpotifyApiService {
         Authorization: `Bearer ${this.token}`,
       },
     });
+
+    this.session.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error) {
+        if (error.response?.status === 401) {
+          window.localStorage.removeItem('spotifyAccessToken');
+          window.location.href = '/';
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
   isLogged() {
@@ -52,7 +65,8 @@ class SpotifyApiService {
   }
 
   hasLocalStorageToken() {
-    return this.getLocalStorageToken() !== 'undefined';
+    const token = this.getLocalStorageToken();
+    return token !== 'undefined' && token !== undefined && token !== 'null' && token !== null;
   }
   getLocalStorageToken() {
     return window.localStorage.getItem('spotifyAccessToken');
@@ -148,28 +162,18 @@ class SpotifyApiService {
     }
   }
 
-  async searchTracks(searchQuery) {
+  async search(searchType, searchQuery) {
     const queryParams = {
       q: searchQuery,
-      type: 'track',
+      type: searchType,
       limit: 5,
     };
-    const response = await this.session.get(
-      `${SPOTIFY_API_BASE_URL}${SPOTIFY_SEARCH_API_URL}?${qs.stringify(queryParams)}`
-    );
-    return response.data.tracks.items;
-  }
+    const iterableKey = searchType + 's';
 
-  async searchPodcasts(searchQuery) {
-    const queryParams = {
-      q: searchQuery,
-      type: 'episode',
-      limit: 5,
-    };
     const response = await this.session.get(
       `${SPOTIFY_API_BASE_URL}${SPOTIFY_SEARCH_API_URL}?${qs.stringify(queryParams)}`
     );
-    return response.data.episodes.items;
+    return response.data[iterableKey].items;
   }
 }
 

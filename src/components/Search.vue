@@ -1,6 +1,10 @@
 <template>
-  <div class="SearchPodcast">
-    <input v-model="podcastQuery" type="text" />
+  <div class="Search">
+    <input
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      v-model="podcastQuery"
+      type="text"
+    />
     <button :disabled="!isPodcastPresent" @click="searchPodcast">Search</button>
   </div>
 </template>
@@ -10,7 +14,7 @@ import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
 
 export default {
-  name: 'SearchPodcast',
+  name: 'Search',
   setup() {
     const store = useStore();
 
@@ -18,7 +22,7 @@ export default {
     const isPodcastPresent = computed(() => podcastQuery.value.length > 0);
 
     function searchPodcast() {
-      store.dispatch('searchPodcasts', podcastQuery.value);
+      store.dispatch('search', podcastQuery.value);
     }
 
     return {

@@ -1,4 +1,4 @@
-export const getHash = hash =>
+export const getHash = (hash) =>
   hash
     .substring(1)
     .split('&')
