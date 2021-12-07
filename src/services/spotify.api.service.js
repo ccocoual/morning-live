@@ -34,7 +34,6 @@ class SpotifyApiService {
     if (enforcer !== singletonEnforcer) {
       throw new Error('Cannot construct singleton');
     }
-
     this.token = this.hasLocalStorageToken() ? this.getLocalStorageToken() : getHash(window.location.hash).access_token;
     this.setLocalStorageToken(this.token);
 
@@ -44,15 +43,28 @@ class SpotifyApiService {
         Authorization: `Bearer ${this.token}`,
       },
     });
+
+    this.session.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error) {
+        if (error.response.status === 401) {
+          window.localStorage.removeItem('spotifyAccessToken');
+          window.location.href = '/';
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
   isLogged() {
-    console.log(this.token);
     return !!this.token;
   }
 
   hasLocalStorageToken() {
-    return this.getLocalStorageToken() !== 'undefined';
+    const token = this.getLocalStorageToken();
+    return token !== 'undefined' && token !== undefined && token !== 'null' && token !== null;
   }
   getLocalStorageToken() {
     return window.localStorage.getItem('spotifyAccessToken');

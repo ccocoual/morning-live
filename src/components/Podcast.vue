@@ -11,7 +11,6 @@
       <div class="text-lg uppercase font-extrabold text-green-400 whitespace-no-wrap overflow-hidden ellipsis">
         {{ podcast.name }}
       </div>
-      <div class="text-lg font-light text-green-300 whitespace-no-wrap overflow-hidden ellipsis">{{ artists }}</div>
       <div class="text-lg font-light text-pink-400 text-shadow whitespace-no-wrap overflow-hidden ellipsis">
         {{ podcast.description }}
       </div>
@@ -19,23 +18,16 @@
   </div>
 </template>
 
-<script>
-import { computed } from 'vue';
+<script lang="ts">
+import { Podcast } from '../models';
 
 export default {
   name: 'Podcast',
   props: {
     podcast: {
-      type: Object,
+      type: Object as Podcast,
       required: true,
     },
-  },
-  setup(props) {
-    const artists = computed(() => props.podcast.artists.map((artist) => artist.name).join(', '));
-
-    return {
-      artists,
-    };
   },
 };
 </script>
